@@ -54,18 +54,6 @@
   <PropertyGroup>
     <ApplicationIcon>ios7-musical-note.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup>
-    <ManifestCertificateThumbprint>13FE5DC0D60BD45209B6EAEC75CDD7EBB495CD37</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestKeyFile>SpryPlayer_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>true</SignManifests>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="GalaSoft.MvvmLight">
       <HintPath>packages\MvvmLightLibs.5.0.2.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
