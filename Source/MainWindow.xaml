@@ -1,0 +1,179 @@
+﻿<Window x:Class="GoodPlayer.MainWindow"
+        DataContext="{Binding Library, Source={StaticResource Locator}}"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+        Title="Spry Player" Height="600" Width="1000" FontWeight="Light" FontFamily="Segoe UI">
+
+    <Window.Resources>
+
+        <Style x:Key="TrackInfo"  TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+        <Style x:Key="TrackInfoHeading"  TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,10,0,0"/>
+        </Style>
+
+        <DataTemplate x:Key="trackNameTemplate">
+            <TextBlock Margin="5" FontSize="12" Text="{Binding Title}"></TextBlock>
+        </DataTemplate>
+
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        </Style>
+
+        <Style TargetType="{x:Type Image}">
+            <Setter Property="Opacity" Value="0.5" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.9" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+
+    <i:Interaction.Triggers>
+
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding SaveLibraryCommand}" />
+        </i:EventTrigger>
+
+    </i:Interaction.Triggers>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="263*"/>
+            <ColumnDefinition Width="100*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="9*" />
+            <RowDefinition MaxHeight="25" Height="1*" />
+        </Grid.RowDefinitions>
+
+        <ListBox BorderThickness="0" FontWeight="Light" Name="peopleListBox" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Path=Tracks}" SelectedItem="{Binding Path=SelectedTrack, Mode=TwoWay}" ItemTemplate="{StaticResource trackNameTemplate}"/>
+        <StackPanel Grid.Column="1" Grid.Row="0">
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <Image Grid.Row="0" Grid.Column="0" Source="Images\document.png" ToolTip="Add Tracks">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDown">
+                            <cmd:EventToCommand Command="{Binding AddFileCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Image>
+
+                <Image Grid.Row="0" Grid.Column="1" Source="Images\folder.png" ToolTip="Add Tracks In Folder">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDown">
+                            <cmd:EventToCommand Command="{Binding AddFolderCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Image>
+
+                <Image Grid.Row="0" Grid.Column="2" Source="Images\ios7-minus.png" ToolTip="Remove Track">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDown">
+                            <cmd:EventToCommand Command="{Binding RemoveFileCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Image>
+
+            </Grid>
+            <StackPanel Margin="10">
+                <TextBlock Text="Track"></TextBlock>
+                <TextBlock Text="{Binding SelectedTrack.Title}" Style="{StaticResource TrackInfo}"></TextBlock>
+                <TextBlock Text="Album" Style="{StaticResource TrackInfoHeading}"></TextBlock>
+                <TextBlock Text="{Binding SelectedTrack.AlbumName}"  Style="{StaticResource TrackInfo}"></TextBlock>
+                <TextBlock Text="Artist" Style="{StaticResource TrackInfoHeading}"></TextBlock>
+                <TextBlock Text="{Binding SelectedTrack.Artist}" Style="{StaticResource TrackInfo}"></TextBlock>
+                <TextBlock Text="Genre" Style="{StaticResource TrackInfoHeading}"></TextBlock>
+                <TextBlock Text="{Binding SelectedTrack.Genre}" Style="{StaticResource TrackInfo}"></TextBlock>
+                <TextBlock Text="Year" Style="{StaticResource TrackInfoHeading}"></TextBlock>
+                <TextBlock Text="{Binding SelectedTrack.Year}" Style="{StaticResource TrackInfo}"></TextBlock>
+                <Image Opacity="1" Source="{Binding SelectedTrack.Picture}" Margin="0,10,0,0"/>
+            </StackPanel>
+        </StackPanel>
+
+
+        <Grid DataContext="{Binding Player, Source={StaticResource Locator}}" Grid.Column="0" Grid.Row="1">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+
+            <Image Grid.Column="0" Grid.Row="0">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDown">
+                        <cmd:EventToCommand Command="{Binding PlayPauseCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <Image.Style>
+                    <Style TargetType="{x:Type Image}">
+                        <Setter Property="Opacity" Value="0.5" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.9" />
+                            </Trigger>
+                            <DataTrigger Binding="{Binding CanPlay}" Value="false">
+                                <Setter Property="Source" Value="Images\ios7-pause.png"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding CanPlay}" Value="true">
+                                <Setter Property="Source" Value="Images\ios7-play.png"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+
+            </Image>
+
+            <Image Grid.Column="1" Grid.Row="0" Source="Images\ios7-skipforward.png">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDown">
+                        <cmd:EventToCommand Command="{Binding PlayNextCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Image>
+            
+            <ScrollViewer Grid.Column="2" Grid.Row="0" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden" x:Name="scroller">
+                <TextBlock Name="nowPlaying" Text="{Binding Path=CurrentTrack.Title}">
+                    <TextBlock.RenderTransform>
+                        <TranslateTransform x:Name="transform" X="0"/>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+            </ScrollViewer>
+            <Image Opacity="0.5" Source="Images\ios7-volume-high.png"  Grid.Column="3" Grid.Row="0" />
+
+            <Slider Name="volumeSlider" VerticalAlignment="Center" Minimum="0" Maximum="1" Value="0.5" Grid.Column="4" Grid.Row="0">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="ValueChanged">
+                        <cmd:EventToCommand Command="{Binding VolumeCommand}" CommandParameter="{Binding Value, ElementName=volumeSlider}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Slider>
+
+        </Grid>
+
+    </Grid>
+
+</Window>
